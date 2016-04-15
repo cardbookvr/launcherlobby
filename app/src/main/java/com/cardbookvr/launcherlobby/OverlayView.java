@@ -85,6 +85,16 @@ public class OverlayView extends LinearLayout {
         rightEye.addShortcut(shortcut);
     }
 
+    public int getSlot() {
+        int slotOffset = shortcutWidth/2 - headOffset;
+        slotOffset /= shortcutWidth;
+        if(slotOffset < 0)
+            slotOffset = 0;
+        if(slotOffset >= shortcuts.size())
+            slotOffset = shortcuts.size() - 1;
+        return slotOffset;
+    }
+
 
     private class OverlayEye extends ViewGroup {
         private Context context;
@@ -125,9 +135,15 @@ public class OverlayView extends LinearLayout {
         }
 
         public void setHeadOffset(int headOffset) {
+            int currentSlot = getSlot();
             int slot = 0;
             for(TextView textView : textViews) {
                 textView.setX(headOffset + depthOffset + (shortcutWidth * slot));
+                if (slot==currentSlot) {
+                    textView.setTextColor(Color.WHITE);
+                } else {
+                    textView.setTextColor(textColor);
+                }
                 slot++;
             }
             slot = 0;
