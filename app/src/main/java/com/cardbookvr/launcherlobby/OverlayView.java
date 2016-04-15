@@ -34,7 +34,6 @@ public class OverlayView extends LinearLayout {
 
         setDepthFactor(0.01f);
         setColor(Color.rgb(150, 255, 180));
-        addContent("Hello Virtual World!");
         setVisibility(View.VISIBLE);
     }
 
