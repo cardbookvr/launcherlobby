@@ -9,12 +9,19 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.vrtoolkit.cardboard.CardboardView;
+
 /**
  * Created by Schoen and Jonathan on 4/15/2016.
  */
 public class OverlayView extends LinearLayout {
     private final OverlayEye leftEye;
     private final OverlayEye rightEye;
+
+    private int virtualWidth;
+    private float pixelsPerRadian;
+
+    private int headOffset;
 
     public OverlayView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -52,6 +59,20 @@ public class OverlayView extends LinearLayout {
         rightEye.addContent(text);
     }
 
+    public void calcVirtualWidth(CardboardView cardboard) {
+        int screenWidth = cardboard.getHeadMountedDisplay().getScreenParams().getWidth() / 2;
+        float fov = cardboard.getCardboardDeviceParams().getLeftEyeMaxFov().getLeft();
+        float pixelsPerDegree = screenWidth / fov;
+        pixelsPerRadian = (float) (pixelsPerDegree * 180.0 / Math.PI);
+        virtualWidth = (int) (pixelsPerDegree * 360.0);
+    }
+
+    public void setHeadYaw(float angle) {
+        headOffset = (int)( angle * pixelsPerRadian );
+        leftEye.setHeadOffset(headOffset);
+        rightEye.setHeadOffset(headOffset);
+    }
+
     private class OverlayEye extends ViewGroup {
         private Context context;
         private AttributeSet attrs;
@@ -77,6 +98,10 @@ public class OverlayView extends LinearLayout {
             textView.setText(text);
             textView.setX(depthOffset);
             addView(textView);
+        }
+
+        public void setHeadOffset(int headOffset) {
+            textView.setX( headOffset + depthOffset );
         }
 
         @Override
