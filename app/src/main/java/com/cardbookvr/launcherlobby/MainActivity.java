@@ -32,7 +32,6 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         overlayView = (OverlayView) findViewById(R.id.overlay);
         overlayView.calcVirtualWidth(cardboardView);
         Drawable icon = getResources().getDrawable(R.drawable.android_robot, null);
-        overlayView.addContent("Hello Virtual World!", icon);
 
         getAppList();
     }
@@ -82,8 +81,11 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         final List<ResolveInfo> pkgAppsList = getPackageManager().queryIntentActivities( mainIntent, PackageManager.GET_INTENT_FILTERS);
 
+        int count = 0;
         for (ResolveInfo info : pkgAppsList) {
-            Log.d("getAppList", info.loadLabel(getPackageManager()).toString());
+            overlayView.addShortcut( new Shortcut(info, getPackageManager()));
+            if (++count == 24)
+                break;
         }
     }
 
