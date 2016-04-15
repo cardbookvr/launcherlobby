@@ -1,5 +1,6 @@
 package com.cardbookvr.launcherlobby;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import com.google.vrtoolkit.cardboard.CardboardActivity;
@@ -24,7 +25,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         overlayView = (OverlayView) findViewById(R.id.overlay);
         overlayView.calcVirtualWidth(cardboardView);
-        overlayView.addContent("Hello Virtual World");
+        Drawable icon = getResources().getDrawable(R.drawable.android_robot, null);
+        overlayView.addContent("Hello Virtual World!", icon);
     }
 
     @Override

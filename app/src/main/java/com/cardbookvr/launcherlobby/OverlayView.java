@@ -2,10 +2,12 @@ package com.cardbookvr.launcherlobby;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -54,9 +56,9 @@ public class OverlayView extends LinearLayout {
         rightEye.setColor(color);
     }
 
-    public void addContent(String text) {
-        leftEye.addContent(text);
-        rightEye.addContent(text);
+    public void addContent(String text, Drawable icon) {
+        leftEye.addContent(text, icon);
+        rightEye.addContent(text, icon);
     }
 
     public void calcVirtualWidth(CardboardView cardboard) {
@@ -81,6 +83,8 @@ public class OverlayView extends LinearLayout {
         private int depthOffset;
         private int viewWidth;
 
+        private ImageView imageView;
+
         public OverlayEye(Context context, AttributeSet attrs) {
             super(context, attrs);
             this.context = context;
@@ -91,17 +95,25 @@ public class OverlayView extends LinearLayout {
             this.textColor = color;
         }
 
-        public void addContent(String text) {
+        public void addContent(String text, Drawable icon) {
             textView = new TextView(context, attrs);
             textView.setGravity(Gravity.CENTER);
             textView.setTextColor(textColor);
             textView.setText(text);
             textView.setX(depthOffset);
             addView(textView);
+
+            imageView = new ImageView(context, attrs);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            imageView.setAdjustViewBounds(true);
+            // preserve aspect ratio
+            imageView.setImageDrawable(icon);
+            addView(imageView);
         }
 
         public void setHeadOffset(int headOffset) {
             textView.setX( headOffset + depthOffset );
+            imageView.setX( headOffset + depthOffset );
         }
 
         @Override
@@ -115,6 +127,13 @@ public class OverlayView extends LinearLayout {
             float topMargin = height * verticalTextPos;
             textView.layout(0, (int) topMargin, width, bottom);
             viewWidth = width;
+
+            final float imageSize = 0.1f;
+            final float verticalImageOffset = -0.07f;
+            float imageMargin = (1.0f - imageSize) / 2.0f;
+            topMargin = (height * (imageMargin + verticalImageOffset));
+            float botMargin =  topMargin + (height * imageSize);
+            imageView.layout(0, (int) topMargin, width, (int) botMargin);
         }
 
         public void setDepthFactor(float factor) {
