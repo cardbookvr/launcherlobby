@@ -13,6 +13,8 @@ import android.widget.TextView;
  * Created by Schoen and Jonathan on 4/15/2016.
  */
 public class OverlayView extends LinearLayout {
+    private final OverlayEye leftEye;
+    private final OverlayEye rightEye;
 
     public OverlayView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -22,13 +24,33 @@ public class OverlayView extends LinearLayout {
                 LayoutParams.MATCH_PARENT, 1.0f);
         params.setMargins(0, 0, 0, 0);
 
-        OverlayEye eye = new OverlayEye(context, attrs);
-        eye.setLayoutParams(params);
-        addView(eye);
+        leftEye = new OverlayEye(context, attrs);
+        leftEye.setLayoutParams(params);
+        addView(leftEye);
 
-        eye.setColor(Color.rgb(150, 255, 180));
-        eye.addContent("Hello Virtual World!");
+        rightEye = new OverlayEye(context, attrs);
+        rightEye.setLayoutParams(params);
+        addView(rightEye);
+
+        setDepthFactor(0.01f);
+        setColor(Color.rgb(150, 255, 180));
+        addContent("Hello Virtual World!");
         setVisibility(View.VISIBLE);
+    }
+
+    public void setDepthFactor(float factor) {
+        leftEye.setDepthFactor(factor);
+        rightEye.setDepthFactor(-factor);
+    }
+
+    public void setColor(int color) {
+        leftEye.setColor(color);
+        rightEye.setColor(color);
+    }
+
+    public void addContent(String text) {
+        leftEye.addContent(text);
+        rightEye.addContent(text);
     }
 
     private class OverlayEye extends ViewGroup {
@@ -36,6 +58,8 @@ public class OverlayView extends LinearLayout {
         private AttributeSet attrs;
         private TextView textView;
         private int textColor;
+        private int depthOffset;
+        private int viewWidth;
 
         public OverlayEye(Context context, AttributeSet attrs) {
             super(context, attrs);
@@ -52,6 +76,7 @@ public class OverlayView extends LinearLayout {
             textView.setGravity(Gravity.CENTER);
             textView.setTextColor(textColor);
             textView.setText(text);
+            textView.setX(depthOffset);
             addView(textView);
         }
 
@@ -65,8 +90,12 @@ public class OverlayView extends LinearLayout {
 
             float topMargin = height * verticalTextPos;
             textView.layout(0, (int) topMargin, width, bottom);
+            viewWidth = width;
         }
 
+        public void setDepthFactor(float factor) {
+            this.depthOffset = (int)(factor * viewWidth);
+        }
     }
 
 }
