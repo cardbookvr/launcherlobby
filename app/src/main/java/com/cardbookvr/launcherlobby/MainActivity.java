@@ -6,6 +6,7 @@ import com.google.vrtoolkit.cardboard.CardboardActivity;
 import com.google.vrtoolkit.cardboard.CardboardView;
 import com.google.vrtoolkit.cardboard.Eye;
 import com.google.vrtoolkit.cardboard.HeadTransform;
+import com.google.vrtoolkit.cardboard.ScreenParams;
 import com.google.vrtoolkit.cardboard.Viewport;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -23,7 +24,11 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         setCardboardView(cardboardView);
 
         overlayView = (OverlayView) findViewById(R.id.overlay);
-        overlayView.addContent("Hello Virtual World");
+//        overlayView.addContent("Hello Virtual World");
+
+        ScreenParams sp = cardboardView.getHeadMountedDisplay().getScreenParams();
+        overlayView.addContent(sp.toString());
+
     }
 
     @Override
