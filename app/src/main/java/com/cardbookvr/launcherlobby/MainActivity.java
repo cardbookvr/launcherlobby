@@ -18,11 +18,14 @@ import java.util.List;
 import javax.microedition.khronos.egl.EGLConfig;
 
 public class MainActivity extends CardboardActivity implements CardboardView.StereoRenderer {
+    public static MainActivity instance;
     private OverlayView overlayView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        instance = this;
+
         setContentView(R.layout.activity_main);
 
         CardboardView cardboardView = (CardboardView) findViewById(R.id.cardboard_view);
@@ -72,6 +75,11 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     @Override
     public void onRendererShutdown() {
 
+    }
+
+    @Override
+    public void onCardboardTrigger(){
+        overlayView.onTrigger();
     }
 
     private void getAppList() {
