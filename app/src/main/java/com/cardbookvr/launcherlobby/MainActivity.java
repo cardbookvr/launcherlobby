@@ -1,13 +1,19 @@
 package com.cardbookvr.launcherlobby;
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.vrtoolkit.cardboard.CardboardActivity;
 import com.google.vrtoolkit.cardboard.CardboardView;
 import com.google.vrtoolkit.cardboard.Eye;
 import com.google.vrtoolkit.cardboard.HeadTransform;
 import com.google.vrtoolkit.cardboard.Viewport;
+
+import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
@@ -27,6 +33,8 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
         overlayView.calcVirtualWidth(cardboardView);
         Drawable icon = getResources().getDrawable(R.drawable.android_robot, null);
         overlayView.addContent("Hello Virtual World!", icon);
+
+        getAppList();
     }
 
     @Override
@@ -66,4 +74,17 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
     public void onRendererShutdown() {
 
     }
+
+    private void getAppList() {
+        final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+        mainIntent.addCategory("com.google.intent.category.CARDBOARD");
+        mainIntent.addFlags(PackageManager.GET_INTENT_FILTERS);
+
+        final List<ResolveInfo> pkgAppsList = getPackageManager().queryIntentActivities( mainIntent, PackageManager.GET_INTENT_FILTERS);
+
+        for (ResolveInfo info : pkgAppsList) {
+            Log.d("getAppList", info.loadLabel(getPackageManager()).toString());
+        }
+    }
+
 }
