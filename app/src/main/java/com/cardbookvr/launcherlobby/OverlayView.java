@@ -96,9 +96,7 @@ public class OverlayView extends LinearLayout {
     }
 
     public void onTrigger() {
-        int slot = getSlot();
-        if(slot > 0 && slot < shortcuts.size())
-            shortcuts.get( getSlot() ).launch();
+        shortcuts.get( getSlot() ).launch();
     }
 
 
