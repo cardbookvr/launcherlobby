@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.google.vrtoolkit.cardboard.CardboardView;
+import com.google.vr.sdk.base.GvrView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,9 +64,9 @@ public class OverlayView extends LinearLayout {
         rightEye.setColor(color);
     }
 
-    public void calcVirtualWidth(CardboardView cardboard) {
+    public void calcVirtualWidth(GvrView cardboard) {
         int screenWidth = cardboard.getHeadMountedDisplay().getScreenParams().getWidth() / 2;
-        float fov = cardboard.getCardboardDeviceParams().getLeftEyeMaxFov().getLeft();
+        float fov = cardboard.getGvrViewerParams().getLeftEyeMaxFov().getLeft();
         float pixelsPerDegree = screenWidth / fov;
         pixelsPerRadian = (float) (pixelsPerDegree * 180.0 / Math.PI);
         virtualWidth = (int) (pixelsPerDegree * 360.0);

@@ -5,19 +5,18 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.util.Log;
 
-import com.google.vrtoolkit.cardboard.CardboardActivity;
-import com.google.vrtoolkit.cardboard.CardboardView;
-import com.google.vrtoolkit.cardboard.Eye;
-import com.google.vrtoolkit.cardboard.HeadTransform;
-import com.google.vrtoolkit.cardboard.Viewport;
+import com.google.vr.sdk.base.Eye;
+import com.google.vr.sdk.base.GvrActivity;
+import com.google.vr.sdk.base.GvrView;
+import com.google.vr.sdk.base.HeadTransform;
+import com.google.vr.sdk.base.Viewport;
 
 import java.util.List;
 
 import javax.microedition.khronos.egl.EGLConfig;
 
-public class MainActivity extends CardboardActivity implements CardboardView.StereoRenderer {
+public class MainActivity extends GvrActivity implements GvrView.StereoRenderer {
     public static MainActivity instance;
     private OverlayView overlayView;
 
@@ -28,12 +27,12 @@ public class MainActivity extends CardboardActivity implements CardboardView.Ste
 
         setContentView(R.layout.activity_main);
 
-        CardboardView cardboardView = (CardboardView) findViewById(R.id.cardboard_view);
-        cardboardView.setRenderer(this);
-        setCardboardView(cardboardView);
+        GvrView gvrView = (GvrView) findViewById(R.id.gvr_view);
+        gvrView.setRenderer(this);
+        setGvrView(gvrView);
 
         overlayView = (OverlayView) findViewById(R.id.overlay);
-        overlayView.calcVirtualWidth(cardboardView);
+        overlayView.calcVirtualWidth(gvrView);
         Drawable icon = getResources().getDrawable(R.drawable.android_robot, null);
 
         getAppList();
